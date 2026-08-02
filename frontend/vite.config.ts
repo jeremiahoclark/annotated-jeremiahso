@@ -1,9 +1,16 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src"),
+    },
+  },
   server: {
     port: 3000,
     host: "0.0.0.0",
@@ -12,6 +19,15 @@ export default defineConfig({
         target: "http://127.0.0.1:8787",
         changeOrigin: false,
       },
+      "/media": {
+        target: "http://127.0.0.1:8787",
+        changeOrigin: false,
+      },
     },
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
+    globals: false,
   },
 });
