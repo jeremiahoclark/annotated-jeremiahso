@@ -31,6 +31,8 @@ export default defineConfig(async () => {
     ],
     test: {
       include: ["src/**/*.test.ts", "tests/**/*.test.ts"],
+      setupFiles: ["./tests/apply-migrations.ts"],
     },
   };
 });
+
