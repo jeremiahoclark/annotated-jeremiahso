@@ -30,8 +30,8 @@ export function FeedCard({ item, compact = false, className }: FeedCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group cursor-pointer rounded-[var(--radius-card)] border border-outline-variant/10 bg-surface-container transition-[border-color] duration-300",
-        "hover:border-primary-container/30 active:border-primary-container/50",
+        "group cursor-pointer rounded-[var(--radius-card)] border border-outline-variant/10 bg-surface-container transition-colors duration-300",
+        "hover:border-primary-container/30 hover:bg-surface-container-high active:border-primary-container/50",
         compact ? "p-4" : "p-5 sm:p-6",
         className
       )}
@@ -48,11 +48,24 @@ export function FeedCard({ item, compact = false, className }: FeedCardProps) {
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <MediaBadge type={item.source_type} />
         {item.domain && (
-          <span className="metrics-font text-[10px] uppercase tracking-widest text-on-surface-variant">
-            {item.domain}
+          <span className="inline-flex items-center gap-1.5 text-sm text-on-surface-variant">
+            <span className="metrics-font uppercase tracking-widest">
+              {item.domain}
+            </span>
+            <a
+              href={item.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-on-surface-variant hover:text-primary"
+              aria-label="Open original source"
+              title="Open original"
+            >
+              <ExternalLinkIcon />
+            </a>
           </span>
         )}
-        <span className="metrics-font ml-auto text-[10px] text-primary/60">
+        <span className="metrics-font ml-auto text-sm text-on-surface-variant">
           {relativeTime(item.created_at)}
         </span>
       </div>
@@ -60,30 +73,32 @@ export function FeedCard({ item, compact = false, className }: FeedCardProps) {
       <div className="mb-2 flex items-start gap-2">
         <h3
           className={cn(
-            "news-title font-semibold leading-snug text-on-surface group-hover:text-primary transition-colors",
+            "news-title font-semibold leading-snug text-on-surface transition-colors group-hover:text-primary",
             compact ? "text-base" : "text-lg"
           )}
         >
           {item.source_title || item.domain || "Untitled source"}
         </h3>
-        <a
-          href={item.source_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="mt-0.5 shrink-0 text-on-surface-variant hover:text-primary"
-          aria-label="Open original source"
-          title="Open original"
-        >
-          <OutboundIcon />
-        </a>
+        {!item.domain && (
+          <a
+            href={item.source_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="mt-0.5 shrink-0 text-on-surface-variant hover:text-primary"
+            aria-label="Open original source"
+            title="Open original"
+          >
+            <ExternalLinkIcon />
+          </a>
+        )}
       </div>
 
       {item.clip_text ? (
         <p
           className={cn(
-            "news-title mb-3 italic text-on-surface-variant",
-            compact ? "line-clamp-2 text-sm" : "line-clamp-3 text-base"
+            "news-title mb-3 line-clamp-fade-2 italic text-on-surface-variant",
+            compact ? "text-sm" : "text-base"
           )}
         >
           “{item.clip_text}”
@@ -96,8 +111,8 @@ export function FeedCard({ item, compact = false, className }: FeedCardProps) {
 
       <p
         className={cn(
-          "mb-4 font-body text-on-surface/90",
-          compact ? "line-clamp-2 text-sm" : "line-clamp-2 text-[15px]"
+          "mb-4 line-clamp-fade-2 font-body text-on-surface",
+          compact ? "text-sm" : "text-[15px]"
         )}
       >
         {item.commentary}
@@ -105,19 +120,19 @@ export function FeedCard({ item, compact = false, className }: FeedCardProps) {
 
       <div className="flex flex-wrap items-center gap-3 border-t border-outline-variant/10 pt-3">
         {item.anonymous || !item.author.handle ? (
-          <span className="text-xs text-on-surface-variant">{authorLabel}</span>
+          <span className="text-sm text-on-surface-variant">{authorLabel}</span>
         ) : (
           <Link
             to={`/@${item.author.handle}`}
             onClick={(e) => e.stopPropagation()}
-            className="text-xs text-on-surface-variant hover:text-primary"
+            className="text-sm text-on-surface-variant hover:text-primary"
           >
             {authorLabel}
           </Link>
         )}
 
         <div className="ml-auto flex items-center gap-3">
-          <span className="metrics-font text-[11px] text-on-surface-variant">
+          <span className="metrics-font text-sm text-on-surface-variant">
             {item.comment_count}{" "}
             {item.comment_count === 1 ? "comment" : "comments"}
           </span>
@@ -133,16 +148,23 @@ export function FeedCard({ item, compact = false, className }: FeedCardProps) {
   );
 }
 
-function OutboundIcon() {
+/** Lucide ExternalLink path at 14px */
+function ExternalLinkIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M14 5h5v5M19 5l-7 7M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
     </svg>
   );
 }

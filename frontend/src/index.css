@@ -90,7 +90,17 @@
   }
 
   .glass-header {
-    @apply bg-background/70 backdrop-blur-xl;
+    @apply border-b border-outline-variant/40 bg-background/70 backdrop-blur-xl;
+  }
+
+  /* Two-line clamp with soft bottom fade (no hard cut) */
+  .line-clamp-fade-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
   }
 
   .news-title {

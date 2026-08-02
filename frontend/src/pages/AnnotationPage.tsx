@@ -124,13 +124,43 @@ export function AnnotationPage() {
       : a.clip_text
         ? "100-word-or-less quote"
         : "Fair-use excerpt";
+  const commentaryExcerpt =
+    a.commentary.length > 200
+      ? `${a.commentary.slice(0, 200).trimEnd()}…`
+      : a.commentary;
+
+  const authorBlock = (
+    <div className="flex flex-wrap items-center gap-3">
+      {a.anonymous || !a.author.handle ? (
+        <div className="flex items-center gap-2">
+          <Avatar name="Anonymous" size="sm" />
+          <span className="text-sm text-on-surface-variant">Anonymous</span>
+        </div>
+      ) : (
+        <Link
+          to={`/@${a.author.handle}`}
+          className="flex items-center gap-2 hover:text-primary"
+        >
+          <Avatar
+            src={a.author.avatar_url}
+            name={a.author.display_name}
+            size="sm"
+          />
+          <span className="text-sm">@{a.author.handle}</span>
+        </Link>
+      )}
+      <span className="metrics-font text-sm text-on-surface-variant">
+        {relativeTime(a.created_at)}
+      </span>
+    </div>
+  );
 
   return (
     <motion.article
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10"
+      className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8"
       data-testid="annotation-page"
     >
       {a.parent && (
@@ -143,13 +173,8 @@ export function AnnotationPage() {
         </Link>
       )}
 
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      <div className="mb-2 flex flex-wrap items-center gap-2">
         <MediaBadge type={a.source_type} />
-        {a.domain && (
-          <span className="metrics-font text-[10px] uppercase tracking-widest text-on-surface-variant">
-            {a.domain}
-          </span>
-        )}
         {windowChip && (
           <span
             className="metrics-font rounded-lg border border-outline-variant/30 bg-surface-container-high px-2.5 py-1 text-xs text-primary"
@@ -160,11 +185,51 @@ export function AnnotationPage() {
         )}
       </div>
 
-      <h1 className="news-title mb-6 text-2xl font-bold text-on-surface sm:text-3xl">
+      <h1 className="news-title mb-3 text-2xl font-bold text-on-surface sm:text-3xl">
         {a.source_title || a.domain || "Annotation"}
       </h1>
 
-      <MediaRegion annotation={a} />
+      {/* Commentary lead above the fold: excerpt + author + votes */}
+      <section className="mb-5">
+        <p
+          className="font-body text-base leading-relaxed text-on-surface sm:text-lg"
+          data-testid="commentary-excerpt"
+        >
+          {commentaryExcerpt}
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {authorBlock}
+          <div className="ml-auto">
+            <VoteButtons
+              annotationId={a.id}
+              upCount={a.up_count}
+              downCount={a.down_count}
+              userVote={data.user_vote}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Source metadata — clear row, breathing room */}
+      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-y border-outline-variant/15 py-4 text-sm text-on-surface-variant">
+        {a.domain && (
+          <span className="metrics-font uppercase tracking-widest">{a.domain}</span>
+        )}
+        <a
+          href={a.source_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 font-semibold text-primary-container hover:text-primary"
+        >
+          View original
+          <span aria-hidden>↗</span>
+        </a>
+      </div>
+
+      {/* Capped media region so commentary lead stays above the fold */}
+      <div className="media-region-cap mx-auto w-full max-w-3xl">
+        <MediaRegion annotation={a} />
+      </div>
 
       {/* Extra screenshot if not already shown in article flow */}
       {a.screenshot_key &&
@@ -177,7 +242,7 @@ export function AnnotationPage() {
             <img
               src={api.mediaUrl(a.screenshot_key)}
               alt="Clip screenshot"
-              className="w-full rounded-[var(--radius-card)] border border-outline-variant/20"
+              className="max-h-[420px] w-full rounded-[var(--radius-card)] border border-outline-variant/20 object-contain"
               loading="lazy"
             />
           </div>
@@ -194,9 +259,9 @@ export function AnnotationPage() {
         </div>
       )}
 
-      {/* Fair-use line */}
+      {/* Fair-use line — directly under media region */}
       <p
-        className="mt-5 text-sm text-on-surface-variant"
+        className="mt-4 text-sm text-on-surface-variant"
         data-testid="fair-use-line"
       >
         {fairUseLead}
@@ -212,7 +277,7 @@ export function AnnotationPage() {
         </a>
       </p>
 
-      {/* Commentary */}
+      {/* Full commentary */}
       <section className="mt-8 border-t border-outline-variant/15 pt-8">
         <p
           className="font-body text-lg leading-relaxed text-on-surface"
@@ -222,36 +287,7 @@ export function AnnotationPage() {
         </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          {a.anonymous || !a.author.handle ? (
-            <div className="flex items-center gap-2">
-              <Avatar name="Anonymous" size="sm" />
-              <span className="text-sm text-on-surface-variant">Anonymous</span>
-            </div>
-          ) : (
-            <Link
-              to={`/@${a.author.handle}`}
-              className="flex items-center gap-2 hover:text-primary"
-            >
-              <Avatar
-                src={a.author.avatar_url}
-                name={a.author.display_name}
-                size="sm"
-              />
-              <span className="text-sm">@{a.author.handle}</span>
-            </Link>
-          )}
-          <span className="metrics-font text-xs text-on-surface-variant">
-            {relativeTime(a.created_at)}
-          </span>
-        </div>
-
-        <div className="mt-5 flex flex-wrap items-center gap-3">
-          <VoteButtons
-            annotationId={a.id}
-            upCount={a.up_count}
-            downCount={a.down_count}
-            userVote={data.user_vote}
-          />
+          {authorBlock}
           <button
             type="button"
             onClick={() => setReportOpen(true)}

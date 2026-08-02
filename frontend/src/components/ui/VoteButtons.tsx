@@ -81,9 +81,11 @@ export function VoteButtons({
     }
   }
 
+  const hit = compact ? "min-h-9 min-w-9 px-2" : "min-h-9 min-w-9 px-2.5";
+
   return (
     <div
-      className={cn("flex items-center gap-1", className)}
+      className={cn("flex items-center gap-1.5", className)}
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >
@@ -94,11 +96,11 @@ export function VoteButtons({
         aria-pressed={vote === 1}
         onClick={() => cast(1)}
         className={cn(
-          "metrics-font flex items-center gap-1 rounded-lg px-2 py-1 text-xs transition-colors active:scale-95",
+          "metrics-font inline-flex items-center justify-center gap-1 rounded-lg border text-sm transition-colors active:scale-95",
+          hit,
           vote === 1
-            ? "bg-primary-container/20 text-primary-container"
-            : "text-on-surface-variant hover:bg-surface-container-high hover:text-primary",
-          compact && "px-1.5"
+            ? "border-primary-container bg-primary-container text-on-primary"
+            : "border-outline-variant/40 bg-surface-container text-on-surface-variant hover:border-primary-container/50 hover:text-primary"
         )}
       >
         <span aria-hidden>▲</span>
@@ -111,11 +113,11 @@ export function VoteButtons({
         aria-pressed={vote === -1}
         onClick={() => cast(-1)}
         className={cn(
-          "metrics-font flex items-center gap-1 rounded-lg px-2 py-1 text-xs transition-colors active:scale-95",
+          "metrics-font inline-flex items-center justify-center gap-1 rounded-lg border text-sm transition-colors active:scale-95",
+          hit,
           vote === -1
-            ? "bg-error-container/20 text-error"
-            : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",
-          compact && "px-1.5"
+            ? "border-error-container/60 bg-error-container/25 text-error"
+            : "border-outline-variant/40 bg-surface-container text-on-surface-variant hover:border-error/40 hover:text-error"
         )}
       >
         <span aria-hidden>▼</span>

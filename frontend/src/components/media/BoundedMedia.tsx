@@ -74,14 +74,17 @@ export function BoundedMedia({
   }
 
   return (
-    <div className="overflow-hidden rounded-[var(--radius-card)] border border-outline-variant/20 bg-black">
+    <div
+      className="mx-auto overflow-hidden rounded-[var(--radius-card)] border border-outline-variant/20 bg-black"
+      style={{ maxWidth: "min(100%, 746px)" }}
+    >
       <video
         ref={ref as React.RefObject<HTMLVideoElement>}
         src={src}
         poster={poster ?? undefined}
         controls
         preload="metadata"
-        className="aspect-video w-full"
+        className="aspect-video max-h-[420px] w-full"
       />
     </div>
   );

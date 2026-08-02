@@ -21,7 +21,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="glass-header sticky top-0 z-50 border-b border-outline-variant/15">
+    <header className="glass-header sticky top-0 z-50">
       <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4 sm:px-6">
         <Link
           to="/"

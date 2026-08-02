@@ -49,13 +49,13 @@ export function LandingPage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
+      {/* Hero — compact so step cards peek above the fold at ~1280×633 */}
+      <section className="relative overflow-hidden px-4 pb-8 pt-10 sm:px-6 sm:pb-10 sm:pt-12">
         <div
-          className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[680px] -translate-x-1/2 rounded-full opacity-40"
+          className="pointer-events-none absolute left-1/2 top-0 h-[280px] w-[560px] -translate-x-1/2 rounded-full"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(255,122,0,0.28) 0%, rgba(255,192,122,0.08) 45%, transparent 70%)",
+              "radial-gradient(ellipse at center, rgba(255,122,0,0.12) 0%, transparent 65%)",
           }}
           aria-hidden
         />
@@ -64,7 +64,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="news-title text-5xl font-bold tracking-tight text-primary sm:text-6xl md:text-7xl"
+            className="news-title text-4xl font-bold tracking-tight text-primary sm:text-5xl md:text-6xl"
           >
             Annotated
           </motion.h1>
@@ -72,7 +72,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.45 }}
-            className="mt-5 text-lg text-on-surface-variant sm:text-xl"
+            className="mt-3 text-base text-on-surface-variant sm:text-lg"
           >
             Clip it. Comment on it. Back it up.
           </motion.p>
@@ -80,19 +80,19 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.45 }}
-            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <a
               href={EXTENSION_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex rounded-xl bg-primary-container px-6 py-3 text-sm font-semibold text-on-primary transition-transform active:scale-[0.98]"
+              className="inline-flex rounded-xl bg-primary-container px-6 py-2.5 text-sm font-semibold text-on-primary transition-transform active:scale-[0.98]"
             >
               Get the Chrome extension
             </a>
             <Link
               to="/feed"
-              className="inline-flex rounded-xl border border-outline-variant/40 px-6 py-3 text-sm font-medium text-on-surface transition-colors hover:border-primary-container/40"
+              className="inline-flex rounded-xl border border-outline-variant px-6 py-2.5 text-sm font-medium text-on-surface transition-colors hover:border-primary-container hover:text-primary"
             >
               Browse the feed
             </Link>
@@ -101,8 +101,8 @@ export function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
-        <h2 className="news-title mb-8 text-center text-2xl font-semibold text-on-surface sm:text-3xl">
+      <section className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 sm:pb-20">
+        <h2 className="news-title mb-5 text-center text-2xl font-semibold text-on-surface sm:mb-6 sm:text-3xl">
           How it works
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -113,7 +113,7 @@ export function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
-              className="rounded-[var(--radius-card)] border border-outline-variant/15 bg-surface-container p-6"
+              className="rounded-[var(--radius-card)] border border-outline-variant/15 bg-surface-container p-5 sm:p-6"
             >
               <span className="metrics-font text-xs text-primary-container">
                 {step.n}

@@ -22,7 +22,7 @@ export function FeedPage() {
       <div className="mb-8 flex items-center justify-between gap-4">
         <h1 className="news-title text-3xl font-bold text-on-surface">Feed</h1>
         <div
-          className="flex rounded-xl border border-outline-variant/25 bg-surface-container p-1"
+          className="inline-flex rounded-full bg-surface-container p-1"
           role="tablist"
           aria-label="Sort"
         >
@@ -34,9 +34,9 @@ export function FeedPage() {
               aria-selected={sort === s}
               onClick={() => setSort(s)}
               className={cn(
-                "metrics-font rounded-lg px-3.5 py-1.5 text-xs uppercase tracking-wider transition-colors",
+                "metrics-font rounded-full px-4 py-1.5 text-xs uppercase tracking-wider transition-colors",
                 sort === s
-                  ? "bg-primary-container text-on-primary"
+                  ? "bg-primary-container font-medium text-black"
                   : "text-on-surface-variant hover:text-on-surface"
               )}
             >

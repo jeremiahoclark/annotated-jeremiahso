@@ -13,8 +13,12 @@ export function YouTubeEmbed({
   end,
   title = "YouTube clip",
 }: YouTubeEmbedProps) {
+  // Cap height (~420px) so commentary lead stays above the fold at 1280×633
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-card)] border border-outline-variant/20 bg-black">
+    <div
+      className="relative mx-auto aspect-video w-full max-h-[420px] overflow-hidden rounded-[var(--radius-card)] border border-outline-variant/20 bg-black"
+      style={{ maxWidth: "min(100%, 746px)" }}
+    >
       <iframe
         src={youtubeEmbedUrl(videoId, start, end)}
         title={title}
