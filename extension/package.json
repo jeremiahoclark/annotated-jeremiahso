@@ -1,0 +1,27 @@
+{
+  "name": "annotated-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Annotated Chrome MV3 extension — clip media, add commentary, share under fair use.",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc --noEmit && vite build && vite build --config vite.background.config.ts && node scripts/copy-static.mjs && node scripts/validate-dist.mjs",
+    "typecheck": "tsc --noEmit",
+    "validate": "node scripts/validate-dist.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.2",
+    "vite": "^7.0.0",
+    "vitest": "^3.0.0"
+  }
+}
