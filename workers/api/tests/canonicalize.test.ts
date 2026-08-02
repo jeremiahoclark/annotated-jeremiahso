@@ -38,4 +38,16 @@ describe("randomBase32 / slugify", () => {
   it("slugifies titles", () => {
     expect(slugify("Hello World!")).toBe("hello-world");
   });
+
+  it("truncates at word boundary, never mid-word", () => {
+    // Would be "foundations-of-modern-thought" — hard-slice at 12 is "foundations-"
+    expect(slugify("Foundations of Modern Thought", 12)).toBe("foundations");
+    expect(slugify("Foundations of Modern Thought", 12)).not.toMatch(/-$/);
+    expect(slugify("the foundations of criticism", 18)).toBe("the-foundations");
+  });
+
+  it("hard-truncates a single long word without trailing dash", () => {
+    expect(slugify("supercalifragilistic", 10)).toBe("supercalif");
+    expect(slugify("supercalifragilistic", 10)).not.toMatch(/-$/);
+  });
 });

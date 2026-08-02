@@ -109,15 +109,27 @@ export function randomBase32(length = 6): string {
   return out;
 }
 
+/**
+ * Slugify a title for URL paths. Truncates at a word boundary
+ * (last '-' before maxLen) so we never cut mid-word ("foundati-").
+ */
 export function slugify(input: string, maxLen = 48): string {
-  const s = input
+  let s = input
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, maxLen)
-    .replace(/-+$/g, "");
+    .replace(/^-+|-+$/g, "");
+
+  if (s.length > maxLen) {
+    s = s.slice(0, maxLen);
+    const lastDash = s.lastIndexOf("-");
+    if (lastDash > 0) {
+      s = s.slice(0, lastDash);
+    }
+    s = s.replace(/-+$/g, "");
+  }
+
   return s || "clip";
 }
 
