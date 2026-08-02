@@ -1,0 +1,28 @@
+name = "annotated-api"
+main = "src/index.ts"
+compatibility_date = "2026-03-24"
+compatibility_flags = ["nodejs_compat"]
+account_id = "04b10da5b2c496a790ebb3f60bfe1b18"
+
+# D1 migrations live at repo root /migrations
+[[d1_databases]]
+binding = "DB"
+database_name = "annotated-db"
+database_id = "ffde16ff-85b3-4578-b0c9-a52c285a344f"
+migrations_dir = "../../migrations"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "annotated-media"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "4a71718c597246eab560c17212ef137f"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "f7a909fb0495434f8b69f4703fa4dd2a"
+
+[vars]
+ENVIRONMENT = "development"
+ADMIN_EMAILS = ""

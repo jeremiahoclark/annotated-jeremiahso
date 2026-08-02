@@ -1,0 +1,22 @@
+{
+  "name": "annotated-jeremiahso",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Annotated — fair-use media annotation network",
+  "workspaces": [
+    "frontend",
+    "workers/api",
+    "workers/app"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w annotated-api",
+    "deploy": "npm run deploy -w annotated-api && npm run build -w annotated-web && npm run deploy -w annotated-app",
+    "db:migrate:local": "npx wrangler d1 migrations apply annotated-db --local -c workers/api/wrangler.toml",
+    "db:migrate:remote": "npx wrangler d1 migrations apply annotated-db --remote -c workers/api/wrangler.toml",
+    "test": "npm run test -w annotated-api && npm run test -w annotated-web",
+    "build": "npm run build -w annotated-web"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

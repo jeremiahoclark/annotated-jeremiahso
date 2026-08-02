@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* Ember Editorial — tonal elevation, orange primary, NO drop shadows */
+@theme {
+  --font-headline: "Newsreader", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-background: #0e0e10;
+  --color-surface: #131313;
+  --color-surface-container: #201f1f;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+
+  --color-primary: #ffc07a;
+  --color-primary-container: #ff7a00;
+  --color-on-primary: #0e0e10;
+
+  --color-secondary: #a7ffd5;
+  --color-secondary-container: #00e676;
+
+  --color-tertiary: #abebff;
+  --color-tertiary-container: #00d7fe;
+
+  --color-error: #ffb4a1;
+  --color-error-container: #ff3d00;
+
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #d5c4ab;
+  --color-outline-variant: #4a3a2a;
+
+  --radius-card: 24px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-body antialiased;
+  }
+
+  ::selection {
+    background-color: #ff7a00;
+    color: #000000;
+  }
+
+  .glass-header {
+    @apply bg-background/70 backdrop-blur-xl;
+  }
+}
