@@ -117,7 +117,7 @@ export function VoteButtons({
           hit,
           vote === -1
             ? "border-error-container/60 bg-error-container/25 text-error"
-            : "border-outline-variant/40 bg-surface-container text-on-surface-variant hover:border-error/40 hover:text-error"
+            : "border-outline-variant/40 bg-surface-container text-on-surface-variant hover:border-primary-container/50 hover:text-primary"
         )}
       >
         <span aria-hidden>▼</span>
