@@ -19,16 +19,25 @@ Commands and invariants for coding agents working in this monorepo.
 
 ### Migrations
 
-D1 migrations live in `/migrations` (repo root). Apply with:
+D1 migrations live in `/migrations` (repo root): `0001_initial`, `0002_better_auth`, `0003_screenshot_uploads`.
+
+Apply **local** (dev / agent sanity — safe to run anytime):
 
 ```bash
-wrangler d1 migrations apply annotated-db --local  -c workers/api/wrangler.toml
-wrangler d1 migrations apply annotated-db --remote -c workers/api/wrangler.toml
+npx wrangler d1 migrations apply annotated-db --local  -c workers/api/wrangler.toml
+# or: npm run db:migrate:local
 ```
 
-Or via npm scripts `db:migrate:local` / `db:migrate:remote`.
+Apply **remote** (production D1 — orchestrator owns infra; do **not** run unless deploying):
+
+```bash
+npx wrangler d1 migrations apply annotated-db --remote -c workers/api/wrangler.toml
+# or: npm run db:migrate:remote
+```
 
 Secrets for `annotated-api`: see `docs/auth-setup.md` and `workers/api/.dev.vars.example`.
+
+API contracts: `docs/CONTRACTS.md`, `frontend/src/lib/types.ts`, `frontend/src/lib/api.ts`.
 
 ## Fair-use invariants (server-side; never trust the client)
 
