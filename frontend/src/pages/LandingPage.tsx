@@ -92,7 +92,7 @@ export function LandingPage() {
             </a>
             <Link
               to="/feed"
-              className="inline-flex rounded-xl border border-outline-variant px-6 py-2.5 text-sm font-medium text-on-surface transition-colors hover:border-primary-container hover:text-primary"
+              className="inline-flex rounded-xl border border-[var(--color-outline-variant)] px-6 py-2.5 text-sm font-medium text-[var(--color-on-surface)] transition-colors hover:border-[var(--color-primary-container)] hover:text-[var(--color-primary-container)]"
             >
               Browse the feed
             </Link>
