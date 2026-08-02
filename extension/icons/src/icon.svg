@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Black rounded square -->
+  <rect width="128" height="128" rx="24" fill="#0E0E10"/>
+  <!-- Orange inner square -->
+  <rect x="18" y="18" width="92" height="92" rx="16" fill="#FF7A00"/>
+  <!-- White scissors (two rings + crossing blades) -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="42" cy="48" r="12"/>
+    <circle cx="42" cy="80" r="12"/>
+    <path d="M52 54 L92 88"/>
+    <path d="M52 74 L92 40"/>
+    <path d="M52 54 L58 60"/>
+    <path d="M52 74 L58 68"/>
+  </g>
+</svg>

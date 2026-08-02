@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Annotated",
+  "version": "0.1.0",
+  "description": "Clip any media, add commentary, share under fair use. Clip it. Comment on it. Back it up.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "contextMenus",
+    "sidePanel",
+    "notifications",
+    "identity"
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "background": {
+    "service_worker": "dist/background.js"
+  },
+  "side_panel": {
+    "default_path": "dist/sidepanel/index.html"
+  }
+}
