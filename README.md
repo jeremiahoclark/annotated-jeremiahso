@@ -29,7 +29,7 @@ Browser ──► annotated-app (Workers Assets SPA)
 ```
 
 - **Two-Worker split:** API owns data, secrets, and business logic; app owns static assets and same-origin `/api/*` proxy (no CORS).
-- **Auth:** Better Auth (Google, X/Twitter OAuth2 PKCE, magic link via Resend).
+- **Auth:** Better Auth (Google, X/Twitter OAuth2 PKCE, magic link via jeremiah-so-mailer).
 - **Fair use:** server-side enforcement of clip limits, required commentary, and always-link-back.
 
 ## Quickstart
@@ -43,7 +43,7 @@ npm install
 
 # Local secrets for the API worker
 cp workers/api/.dev.vars.example workers/api/.dev.vars
-# fill BETTER_AUTH_SECRET, OAuth, Resend as needed
+# fill BETTER_AUTH_SECRET, OAuth, mailer as needed
 
 # Apply D1 migrations (local)
 npm run db:migrate:local
@@ -68,7 +68,7 @@ npm run db:migrate:remote
 npm run deploy
 ```
 
-See [docs/auth-setup.md](docs/auth-setup.md) for OAuth and Resend setup, [docs/FAIR-USE.md](docs/FAIR-USE.md) for the public fair-use policy, and [docs/SPEC.md](docs/SPEC.md) for the full product contract.
+See [docs/auth-setup.md](docs/auth-setup.md) for OAuth and mailer setup, [docs/FAIR-USE.md](docs/FAIR-USE.md) for the public fair-use policy, and [docs/SPEC.md](docs/SPEC.md) for the full product contract.
 
 ### Fonts
 

@@ -1,6 +1,6 @@
 # Auth setup — Annotated
 
-Better Auth on `annotated-api` (`basePath` `/api/auth`). Providers: **Google**, **X (Twitter)**, **email magic link** (Resend).
+Better Auth on `annotated-api` (`basePath` `/api/auth`). Providers: **Google**, **X (Twitter)**, **email magic link** (jeremiah-so-mailer).
 
 Secrets live only in Wrangler secrets (remote) or `workers/api/.dev.vars` (local). Never commit secrets.
 
@@ -47,15 +47,27 @@ Secrets live only in Wrangler secrets (remote) or `workers/api/.dev.vars` (local
 7. Enable **OAuth 2.0** with **PKCE**.
 8. Copy **Client ID** and **Client Secret** → `TWITTER_CLIENT_ID` / `TWITTER_CLIENT_SECRET`.
 
-## 3. Resend (magic link email)
+## 3. jeremiah-so-mailer (magic link email)
 
-1. Sign up at [Resend](https://resend.com/).
-2. Add and verify a sending domain (DNS: SPF, DKIM, optional DMARC).
-3. Create an API key with send permission.
-4. Set:
-   - `RESEND_API_KEY` = the API key  
-   - `EMAIL_FROM` = e.g. `Annotated <auth@yourdomain.com>`  
-5. Without `RESEND_API_KEY`, development may log the magic link and return it in JSON only when `ENVIRONMENT=development`.
+Magic-link email is sent via the **jeremiah-so-mailer** Cloudflare Worker (Cloudflare Email Routing). Mail goes out as **hey@jeremiah.so** from:
+
+`https://jeremiah-so-mailer.jeremiahoclark.workers.dev`
+
+1. **`MAILER_URL`** — mailer worker base URL. Set in `workers/api/wrangler.toml` `[vars]` (not a secret):
+
+   ```toml
+   MAILER_URL = "https://jeremiah-so-mailer.jeremiahoclark.workers.dev"
+   ```
+
+2. **`MAILER_SEND_TOKEN`** — mailer’s bearer token. Set as a Wrangler secret:
+
+   ```bash
+   npx wrangler secret put MAILER_SEND_TOKEN -c workers/api/wrangler.toml
+   ```
+
+3. Without `MAILER_URL` / `MAILER_SEND_TOKEN`, development may log the magic link and return it in JSON only when `ENVIRONMENT=development`.
+
+From / reply-to are hardcoded in the API as `Annotated <hey@jeremiah.so>` / `hey@jeremiah.so` (the mailer’s verified sending address).
 
 ## 4. Better Auth secret
 
@@ -79,14 +91,14 @@ npx wrangler secret put GOOGLE_CLIENT_ID
 npx wrangler secret put GOOGLE_CLIENT_SECRET
 npx wrangler secret put TWITTER_CLIENT_ID
 npx wrangler secret put TWITTER_CLIENT_SECRET
-npx wrangler secret put RESEND_API_KEY
-npx wrangler secret put EMAIL_FROM
+npx wrangler secret put MAILER_SEND_TOKEN
 ```
 
 Optional vars (wrangler.toml `[vars]`, not secrets):
 
 - `ENVIRONMENT` — `development` | `production` | `test`
 - `ADMIN_EMAILS` — comma-separated allowlist for admin routes
+- `MAILER_URL` — jeremiah-so-mailer worker base URL
 
 ## 6. Local dev (`.dev.vars`)
 
@@ -102,11 +114,13 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 TWITTER_CLIENT_ID=
 TWITTER_CLIENT_SECRET=
-RESEND_API_KEY=
-EMAIL_FROM=
+MAILER_URL=
+MAILER_SEND_TOKEN=
 ```
 
 `.dev.vars` is gitignored. Wrangler loads it automatically for `wrangler dev`.
+
+Leave `MAILER_URL` / `MAILER_SEND_TOKEN` empty for local magic-link testing: with `ENVIRONMENT=development`, the API logs the link and returns `dev_link` in the JSON response.
 
 ## 7. Smoke check
 

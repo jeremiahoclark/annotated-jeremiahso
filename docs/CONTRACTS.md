@@ -156,7 +156,7 @@ Standard Better Auth routes under `basePath` `/api/auth`:
 - Google: `/api/auth/sign-in/social` provider `google`
 - Twitter/X: provider `twitter` (built-in better-auth social provider)
 - Magic link: `POST /api/auth/sign-in/magic-link` `{ email }`
-  - With `RESEND_API_KEY`: email sent via Resend
+  - With `MAILER_URL` + `MAILER_SEND_TOKEN`: email sent via jeremiah-so-mailer
   - Without + `ENVIRONMENT=development`: console.log + response includes `dev_link`
 
 ### `POST /api/screenshots` (auth)

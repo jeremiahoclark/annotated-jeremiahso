@@ -9,8 +9,12 @@ import { D1Dialect } from "kysely-d1";
 import type { Env } from "./env";
 import { ensureAppUser } from "./db";
 
-/** Last magic-link URL for dev JSON responses (no RESEND). */
+/** Last magic-link URL for dev JSON responses (no mailer). */
 let lastDevMagicLink: string | null = null;
+
+const MAILER_FROM = "Annotated <hey@jeremiah.so>";
+const MAILER_REPLY_TO = "hey@jeremiah.so";
+const MAILER_TIMEOUT_MS = 8_000;
 
 export function takeDevMagicLink(): string | null {
   const v = lastDevMagicLink;
@@ -26,26 +30,52 @@ function isDev(env: Env): boolean {
   return (env.ENVIRONMENT || "").toLowerCase() === "development";
 }
 
-async function sendResendEmail(
+function hasMailer(env: Env): boolean {
+  return Boolean(env.MAILER_URL?.trim() && env.MAILER_SEND_TOKEN?.trim());
+}
+
+/**
+ * Send via jeremiah-so-mailer Worker.
+ * Logs failures; rethrows so magic-link sign-in surfaces the error.
+ */
+async function sendMailerEmail(
   env: Env,
   to: string,
   subject: string,
+  text: string,
   html: string
 ): Promise<void> {
-  const key = env.RESEND_API_KEY?.trim();
-  if (!key) return;
-  const from = env.EMAIL_FROM?.trim() || "Annotated <onboarding@resend.dev>";
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ from, to: [to], subject, html }),
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    console.error("Resend send failed", res.status, text);
+  const base = env.MAILER_URL!.trim().replace(/\/$/, "");
+  const token = env.MAILER_SEND_TOKEN!.trim();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), MAILER_TIMEOUT_MS);
+  try {
+    const res = await fetch(`${base}/send`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to,
+        from: MAILER_FROM,
+        subject,
+        text,
+        html,
+        replyTo: MAILER_REPLY_TO,
+      }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("Mailer send failed", res.status, body);
+      throw new Error(`Mailer send failed: ${res.status}`);
+    }
+  } catch (err) {
+    console.error("Mailer send error", err);
+    throw err;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -120,13 +150,10 @@ export function buildAuth(env: Env) {
       magicLink({
         sendMagicLink: async ({ email, url }) => {
           lastDevMagicLink = url;
-          if (env.RESEND_API_KEY?.trim()) {
-            await sendResendEmail(
-              env,
-              email,
-              "Sign in to Annotated",
-              `<p>Click to sign in:</p><p><a href="${url}">${url}</a></p>`
-            );
+          if (hasMailer(env)) {
+            const html = `<p>Click to sign in:</p><p><a href="${url}">${url}</a></p>`;
+            const text = `Click to sign in: ${url}`;
+            await sendMailerEmail(env, email, "Sign in to Annotated", text, html);
           } else {
             console.log("[magic-link]", email, url);
           }
@@ -203,7 +230,7 @@ export function resetAuthCache(): void {
 }
 
 /**
- * Handle Better Auth routes; in development without Resend, attach dev_link
+ * Handle Better Auth routes; in development without mailer, attach dev_link
  * to magic-link JSON responses.
  */
 export async function handleAuthRequest(
@@ -218,12 +245,7 @@ export async function handleAuthRequest(
     request.method === "POST" &&
     url.pathname.replace(/\/$/, "").endsWith("/sign-in/magic-link");
 
-  if (
-    isMagicLinkPost &&
-    isDev(env) &&
-    !env.RESEND_API_KEY?.trim() &&
-    res.ok
-  ) {
+  if (isMagicLinkPost && isDev(env) && !hasMailer(env) && res.ok) {
     const link = takeDevMagicLink();
     if (link) {
       try {

@@ -27,3 +27,4 @@ id = "f7a909fb0495434f8b69f4703fa4dd2a"
 # Local dev overrides this via workers/api/.dev.vars (ENVIRONMENT=development).
 ENVIRONMENT = "production"
 ADMIN_EMAILS = "jeremiahoclark@gmail.com"
+MAILER_URL = "https://jeremiah-so-mailer.jeremiahoclark.workers.dev"

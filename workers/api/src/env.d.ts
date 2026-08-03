@@ -13,8 +13,10 @@ export interface Env {
   GOOGLE_CLIENT_SECRET?: string;
   TWITTER_CLIENT_ID?: string;
   TWITTER_CLIENT_SECRET?: string;
-  RESEND_API_KEY?: string;
-  EMAIL_FROM?: string;
+  /** jeremiah-so-mailer worker base URL (plain [vars], not a secret) */
+  MAILER_URL?: string;
+  /** Bearer token for the mailer worker (wrangler secret) */
+  MAILER_SEND_TOKEN?: string;
 
   /** Injected by vitest pool workers */
   TEST_MIGRATIONS?: {
@@ -37,8 +39,8 @@ declare global {
       GOOGLE_CLIENT_SECRET?: string;
       TWITTER_CLIENT_ID?: string;
       TWITTER_CLIENT_SECRET?: string;
-      RESEND_API_KEY?: string;
-      EMAIL_FROM?: string;
+      MAILER_URL?: string;
+      MAILER_SEND_TOKEN?: string;
       TEST_MIGRATIONS?: {
         name: string;
         queries: string[];

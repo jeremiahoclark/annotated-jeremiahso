@@ -63,11 +63,12 @@ annotated-jeremiahso/
 - Router: Hono (NOT the trendingblack hand-rolled if-chain).
 - Auth: Better Auth (kysely-d1 adapter), basePath /api/auth. Providers:
   Google (`google`), X/Twitter (`twitter`), email magic link (`magicLink` plugin;
-  sender via `EMAIL_FROM` + `RESEND_API_KEY` secret; when RESEND_API_KEY absent,
-  log the link and return it in JSON only when ENVIRONMENT=development).
+  sender via jeremiah-so-mailer: `MAILER_URL` var + `MAILER_SEND_TOKEN` secret;
+  when mailer unset, log the link and return it in JSON only when
+  ENVIRONMENT=development). From: Annotated <hey@jeremiah.so>.
   Secrets: BETTER_AUTH_SECRET, GOOGLE_CLIENT_ID/SECRET, TWITTER_CLIENT_ID/SECRET
-  (OAuth2 PKCE), RESEND_API_KEY. Vars: ENVIRONMENT.
-  docs/auth-setup.md documents exact console setup steps for Google + X + resend.
+  (OAuth2 PKCE), MAILER_SEND_TOKEN. Vars: ENVIRONMENT, MAILER_URL.
+  docs/auth-setup.md documents exact console setup steps for Google + X + mailer.
   Session: Better Auth cookie sessions for web; bearer plugin for extension
   (POST /api/auth/extension/token: web session → one-time bearer mint for the
   extension's launchWebAuthFlow round trip). Admin: env var ADMIN_EMAILS allowlist
