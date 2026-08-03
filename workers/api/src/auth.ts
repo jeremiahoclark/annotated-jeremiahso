@@ -31,7 +31,7 @@ function isDev(env: Env): boolean {
 }
 
 function hasMailer(env: Env): boolean {
-  return Boolean(env.MAILER_URL?.trim() && env.MAILER_SEND_TOKEN?.trim());
+  return Boolean(env.MAILER && env.MAILER_SEND_TOKEN?.trim());
 }
 
 /**
@@ -45,12 +45,11 @@ async function sendMailerEmail(
   text: string,
   html: string
 ): Promise<void> {
-  const base = env.MAILER_URL!.trim().replace(/\/$/, "");
   const token = env.MAILER_SEND_TOKEN!.trim();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), MAILER_TIMEOUT_MS);
   try {
-    const res = await fetch(`${base}/send`, {
+    const res = await env.MAILER!.fetch("https://mailer.internal/send", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

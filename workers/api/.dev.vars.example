@@ -3,5 +3,4 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 TWITTER_CLIENT_ID=
 TWITTER_CLIENT_SECRET=
-MAILER_URL=
-MAILER_SEND_TOKEN=
+MAILER_SEND_TOKEN=  # bearer token for jeremiah-so-mailer (service binding MAILER -> jeremiah-so-mailer)

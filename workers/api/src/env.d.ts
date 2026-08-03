@@ -13,8 +13,8 @@ export interface Env {
   GOOGLE_CLIENT_SECRET?: string;
   TWITTER_CLIENT_ID?: string;
   TWITTER_CLIENT_SECRET?: string;
-  /** jeremiah-so-mailer worker base URL (plain [vars], not a secret) */
-  MAILER_URL?: string;
+  /** Service binding to jeremiah-so-mailer worker */
+  MAILER?: Fetcher;
   /** Bearer token for the mailer worker (wrangler secret) */
   MAILER_SEND_TOKEN?: string;
 
@@ -39,7 +39,6 @@ declare global {
       GOOGLE_CLIENT_SECRET?: string;
       TWITTER_CLIENT_ID?: string;
       TWITTER_CLIENT_SECRET?: string;
-      MAILER_URL?: string;
       MAILER_SEND_TOKEN?: string;
       TEST_MIGRATIONS?: {
         name: string;

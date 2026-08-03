@@ -53,10 +53,9 @@ Magic-link email is sent via the **jeremiah-so-mailer** Cloudflare Worker (Cloud
 
 `https://jeremiah-so-mailer.jeremiahoclark.workers.dev`
 
-1. **`MAILER_URL`** — mailer worker base URL. Set in `workers/api/wrangler.toml` `[vars]` (not a secret):
+1. **`MAILER_SEND_TOKEN`** — bearer token for the jeremiah-so-mailer worker (wrangler secret). The mailer itself is reached via a Cloudflare service binding (`MAILER` -> `jeremiah-so-mailer`) configured in `workers/api/wrangler.toml`, so no URL var is needed:
 
    ```toml
-   MAILER_URL = "https://jeremiah-so-mailer.jeremiahoclark.workers.dev"
    ```
 
 2. **`MAILER_SEND_TOKEN`** — mailer’s bearer token. Set as a Wrangler secret:
@@ -65,7 +64,7 @@ Magic-link email is sent via the **jeremiah-so-mailer** Cloudflare Worker (Cloud
    npx wrangler secret put MAILER_SEND_TOKEN -c workers/api/wrangler.toml
    ```
 
-3. Without `MAILER_URL` / `MAILER_SEND_TOKEN`, development may log the magic link and return it in JSON only when `ENVIRONMENT=development`.
+3. Without `MAILER_SEND_TOKEN`, development may log the magic link and return it in JSON only when `ENVIRONMENT=development`.
 
 From / reply-to are hardcoded in the API as `Annotated <hey@jeremiah.so>` / `hey@jeremiah.so` (the mailer’s verified sending address).
 
@@ -98,7 +97,7 @@ Optional vars (wrangler.toml `[vars]`, not secrets):
 
 - `ENVIRONMENT` — `development` | `production` | `test`
 - `ADMIN_EMAILS` — comma-separated allowlist for admin routes
-- `MAILER_URL` — jeremiah-so-mailer worker base URL
+- 
 
 ## 6. Local dev (`.dev.vars`)
 
@@ -114,13 +113,12 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 TWITTER_CLIENT_ID=
 TWITTER_CLIENT_SECRET=
-MAILER_URL=
 MAILER_SEND_TOKEN=
 ```
 
 `.dev.vars` is gitignored. Wrangler loads it automatically for `wrangler dev`.
 
-Leave `MAILER_URL` / `MAILER_SEND_TOKEN` empty for local magic-link testing: with `ENVIRONMENT=development`, the API logs the link and returns `dev_link` in the JSON response.
+Leave `MAILER_SEND_TOKEN` empty for local magic-link testing: with `ENVIRONMENT=development`, the API logs the link and returns `dev_link` in the JSON response.
 
 ## 7. Smoke check
 
